@@ -4,10 +4,10 @@ import { showFormattedDate } from "../utils";
 
 function NoteDetail({ title, createdAt, body }) {
     return (
-        <div>
-            <h3>{title}</h3>
-            <p className='note-item__createdAt'>{showFormattedDate(createdAt)}</p>
-            <p className='note-item__body'>{body}</p>
+        <div className="detail-page">
+            <h3 className="detail-page__title">{title}</h3>
+            <p className='detail-page__createdAt'>{showFormattedDate(createdAt)}</p>
+            <p className='detail-page__body'>{body}</p>
         </div>
     )
 }
