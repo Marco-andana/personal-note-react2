@@ -4,7 +4,7 @@ import NoteDetail from "../components/NoteDetail";
 import { getNote } from "../utils/local-data";
 
 function DetailPageWrapper() {
-    const id = useParams();
+    const { id } = useParams();
     return <DetailPage id={Number(id)} />
 }
 
