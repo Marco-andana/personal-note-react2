@@ -2,7 +2,7 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import NoteList from "../components/NoteList";
 import SearchBar from "../components/SearchBar";
-import { getAllNotes } from "../utils/local-data";
+import { getActiveNotes, getAllNotes } from "../utils/local-data";
 import NoteAdd from "../components/NoteAdd";
 
 function HomePageWrapper() {
@@ -52,7 +52,7 @@ class HomePage extends React.Component {
             <section className="search-bar">
             <SearchBar keyword={this.state.keyword} keywordChange={this.onKeywordChangeHandler} />
             </section>
-            <NoteList notes={notes.filter((note) => note.archived === false)} />
+            <NoteList notes={getActiveNotes()} />
             <NoteAdd />
             </section>
         )

@@ -1,10 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function NoteDetailAction({ id, onDelete, onArchive, onUnArchive }) {
+function NoteDetailAction({ id, onDelete, onArchive, onUnArchive, archived }) {
     return (
         <div className="detail-page__action">
+        {archived ? (
+            <Link to='/' className="action" onClick={() => onUnArchive(id)}>a</Link>
+        ) : (
             <Link to='/' className="action" onClick={() => onArchive(id)}>a</Link>
+        )}
             <Link to='/' className="action" onClick={() => onDelete(id)}>x</Link>
         </div>
     )

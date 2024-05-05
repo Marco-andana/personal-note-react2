@@ -2,8 +2,7 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import NoteList from "../components/NoteList";
 import SearchBar from "../components/SearchBar";
-import { getAllNotes } from "../utils/local-data";
-import NoteAdd from "../components/NoteAdd";
+import { getAllNotes, getArchivedNotes } from "../utils/local-data";
 
 function ArchivePageWrapper() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -52,7 +51,7 @@ class ArchivePage extends React.Component {
             <section className="search-bar">
             <SearchBar keyword={this.state.keyword} keywordChange={this.onKeywordChangeHandler} />
             </section>
-            <NoteList notes={notes.filter((note) => note.archived === true)} />
+            <NoteList notes={getArchivedNotes()} />
             </section>
         )
     }

@@ -60,10 +60,12 @@ class DetailPage extends React.Component {
             )
         }
 
+        const { archived } = this.state.note;
+
         return (
             <section>
                 <NoteDetail {...this.state.note} />
-                <NoteDetailAction id={this.props.id} onDelete={this.onDeleteHandler} onArchive={this.onArchiveHandler} onUnArchive={this.onUnArchiveHandler} />
+                <NoteDetailAction id={this.props.id} onDelete={this.onDeleteHandler} onArchive={this.onArchiveHandler} onUnArchive={this.onUnArchiveHandler} archived={archived} />
             </section>
         )
     }
