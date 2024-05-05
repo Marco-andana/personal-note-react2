@@ -11,7 +11,7 @@ function HomePageWrapper() {
     const keyword = searchParams.get('keyword')
 
     function changeSearchParams(keyword) {
-        setSearchParams({ keyword });
+        setSearchParams({ title: keyword });
     }
 
     return <HomePage defaultKeyword={keyword} keywordChange={changeSearchParams} />
@@ -52,7 +52,7 @@ class HomePage extends React.Component {
             <section className="search-bar">
             <SearchBar keyword={this.state.keyword} keywordChange={this.onKeywordChangeHandler} />
             </section>
-            <NoteList notes={getActiveNotes()} />
+            <NoteList notes={notes.filter((note) => note.archived === false)} />
             <NoteAdd />
             </section>
         )

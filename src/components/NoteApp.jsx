@@ -1,11 +1,11 @@
 import React from "react";
 import { Route, Routes } from 'react-router-dom'
 import Navigation from "./Navigation";
-import SearchBar from "./SearchBar";
 import HomePage from "../pages/HomePage";
 import AddPage from "../pages/AddPage";
 import DetailPage from "../pages/DetailPage";
 import ArchivePage from "../pages/ArchivePage"
+import NotFoundPage from "../pages/NotFoundPage";
 
 function NoteApp() {
     return (
@@ -19,6 +19,7 @@ function NoteApp() {
                         <Route path="/add" element={<AddPage />} />
                         <Route path="/notes/:id" element={<DetailPage />} />
                         <Route path="/arsip" element={<ArchivePage />} />
+                        <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                 </main>
         </div>

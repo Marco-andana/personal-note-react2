@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-
 function SearchBar({ keyword, keywordChange}) {
     return (
         <input

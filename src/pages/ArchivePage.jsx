@@ -51,7 +51,7 @@ class ArchivePage extends React.Component {
             <section className="search-bar">
             <SearchBar keyword={this.state.keyword} keywordChange={this.onKeywordChangeHandler} />
             </section>
-            <NoteList notes={getArchivedNotes()} />
+            <NoteList notes={notes.filter((note) => note.archived === true)} />
             </section>
         )
     }
