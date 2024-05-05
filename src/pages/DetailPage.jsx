@@ -3,10 +3,15 @@ import { useParams } from "react-router-dom";
 import NoteDetail from "../components/NoteDetail";
 import { getNote, getAllNotes, deleteNote, archiveNote, unarchiveNote } from "../utils/local-data";
 import NoteDetailAction from "../components/NoteDetailAction";
+import PropTypes from 'prop-types';
 
 function DetailPageWrapper() {
     const { id } = useParams();
     return <DetailPage id={id} />
+}
+
+DetailPageWrapper.propTypes = {
+    id: PropTypes.string
 }
 
 class DetailPage extends React.Component {
