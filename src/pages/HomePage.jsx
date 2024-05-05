@@ -18,11 +18,6 @@ function HomePageWrapper() {
     return <HomePage defaultKeyword={keyword} keywordChange={changeSearchParams} />
 }
 
-HomePageWrapper.propTypes = {
-    defaultKeyword: PropTypes.string,
-    keywordChange: PropTypes.func
-}
-
 class HomePage extends React.Component {
     constructor(props) {
         super(props);
@@ -64,5 +59,10 @@ class HomePage extends React.Component {
         )
     }
 }
+
+HomePage.propTypes = {
+    defaultKeyword: PropTypes.string,
+    keywordChange: PropTypes.func
+};
 
 export default HomePageWrapper;
