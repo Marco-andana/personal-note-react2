@@ -6,9 +6,91 @@ import AddPage from "../pages/AddPage";
 import DetailPage from "../pages/DetailPage";
 import ArchivePage from "../pages/ArchivePage"
 import NotFoundPage from "../pages/NotFoundPage";
+import LoginPage from "../pages/LoginPage";
+import { getUserLogged, putAccessToken } from "../utils/network-data";
+import { LocaleProvider } from "../contexts/LocaleContext";
+import RegisterPage from "../pages/RegisterPage";
 
-function NoteApp() {
+class NoteApp extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            authedUser: null,
+            initializing: true,
+            localeContext: {
+                locale: localStorage.getItem('locale') || 'id',
+                toggleLocale: () => {
+                    this.setState((prevState) => {
+                        const newLocale = prevState.localeContext.locale === 'id' ? 'en' : 'id';
+                        localStorage.setItem('locale', newLocale);
+                        return {
+                            localeContext: {
+                                ...prevState.localeContext,
+                                locale: newLocale
+                            }
+                        }
+                    })
+                }
+            }
+        }
+
+        this.onLoginSuccess = this.onLoginSuccess.bind(this);
+        this.onLogout = this.onLogout.bind(this);
+    }
+
+    async componentDidMount() {
+        const { data } = await getUserLogged();
+
+        this.setState({
+            authedUser: data,
+            initializing: false
+        })
+    }
+
+    async onLoginSuccess({ accessToken }) {
+        putAccessToken(accessToken);
+        const { data } = await getUserLogged();
+
+        this.setState({
+            authedUser: data
+        })
+    }
+
+    onLogout() {
+        this.setState(() => {
+            return {
+            authedUser: null
+            }
+        })
+        putAccessToken('')
+    }
+
+    render() {
+        if(this.state.initializing) {
+            return null;
+        }
+
+        if(this.state.authedUser === null) {
+            return (
+                <LocaleProvider value={this.state.localeContext}>
+                    <div className="app-container">
+                        <header>
+                            <Navigation authedUser={this.state.authedUser} />
+                        </header>
+                        <main>
+                            <Routes>
+                                <Route path="/*" element={<LoginPage loginSuccess={this.onLoginSuccess}/>} />
+                                <Route path="/register" element={<RegisterPage />} />
+                            </Routes>
+                        </main>
+                    </div>
+                </LocaleProvider>
+            )
+        }
+ 
     return (
+        <LocaleProvider value={this.state.localeContext}>
         <div className="app-container">
             <header>
                 <Navigation />
@@ -23,7 +105,9 @@ function NoteApp() {
                     </Routes>
                 </main>
         </div>
+        </LocaleProvider>
     )
+}
 }
 
 export default NoteApp;
