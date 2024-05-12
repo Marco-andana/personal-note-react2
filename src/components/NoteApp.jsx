@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Routes } from 'react-router-dom'
+import React, {useState, useMemo, useEffect} from "react";
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import Navigation from "./Navigation";
 import HomePage from "../pages/HomePage";
 import AddPage from "../pages/AddPage";
@@ -9,91 +9,101 @@ import NotFoundPage from "../pages/NotFoundPage";
 import LoginPage from "../pages/LoginPage";
 import { getUserLogged, putAccessToken } from "../utils/network-data";
 import { LocaleProvider } from "../contexts/LocaleContext";
+import { ThemeProvider } from "../contexts/ThemeContext";
 import RegisterPage from "../pages/RegisterPage";
 
-class NoteApp extends React.Component {
-    constructor(props) {
-        super(props);
+function NoteApp() {
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light')
+    const [locale, setLocale] = useState(localStorage.getItem('locale') || 'id')
+    const [authedUser, setAuthedUser] = useState(null)
+    const [initializing, setInitializing] = useState(true);
+    const navigate = useNavigate();
 
-        this.state = {
-            authedUser: null,
-            initializing: true,
-            localeContext: {
-                locale: localStorage.getItem('locale') || 'id',
-                toggleLocale: () => {
-                    this.setState((prevState) => {
-                        const newLocale = prevState.localeContext.locale === 'id' ? 'en' : 'id';
-                        localStorage.setItem('locale', newLocale);
-                        return {
-                            localeContext: {
-                                ...prevState.localeContext,
-                                locale: newLocale
-                            }
-                        }
-                    })
-                }
-            }
-        }
-
-        this.onLoginSuccess = this.onLoginSuccess.bind(this);
-        this.onLogout = this.onLogout.bind(this);
-    }
-
-    async componentDidMount() {
-        const { data } = await getUserLogged();
-
-        this.setState({
-            authedUser: data,
-            initializing: false
+    const toggleTheme = () => {
+        setTheme((prevTheme) => {
+            const newTheme = prevTheme === 'light' ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            return newTheme;
         })
     }
 
-    async onLoginSuccess({ accessToken }) {
+    const themeContext = useMemo(() => {
+        return {
+            theme,
+            toggleTheme
+        }
+    }, [theme])
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+    })
+
+    const toggleLocale = () => {
+        setLocale((prevLocale) => {
+            const newLocale = prevLocale === 'id' ? 'en' : 'id';
+            localStorage.setItem('locale', newLocale);
+            return newLocale;
+        })
+    }
+
+    const localeContext = useMemo(() => {
+        return {
+            locale,
+            toggleLocale
+        }
+    }, [locale])
+
+    const fetchData = async () => {
+        const { data } = await getUserLogged();
+        setAuthedUser(data);
+      };
+
+    useEffect(() => {
+        fetchData().then(() => {
+          setInitializing(false);
+        });
+      }, []);
+
+    async function onLoginSuccess({ accessToken }) {
         putAccessToken(accessToken);
-        const { data } = await getUserLogged();
-
-        this.setState({
-            authedUser: data
-        })
+        fetchData();
+        navigate('/')
     }
 
-    onLogout() {
-        this.setState(() => {
-            return {
-            authedUser: null
-            }
-        })
+    function onLogout() {
+        setAuthedUser(null);
         putAccessToken('')
+        navigate('/')
     }
 
-    render() {
-        if(this.state.initializing) {
-            return null;
-        }
+    if(initializing) return null
 
-        if(this.state.authedUser === null) {
+        if(authedUser === null) {
             return (
-                <LocaleProvider value={this.state.localeContext}>
-                    <div className="app-container">
+                <ThemeProvider value={themeContext}>
+                <LocaleProvider value={localeContext}>
+                    <div className="app-container" data-theme={theme}>
                         <header>
-                            <Navigation authedUser={this.state.authedUser} />
+                            <Navigation logout={onLogout} authedUser={authedUser} name={''} />
                         </header>
                         <main>
                             <Routes>
-                                <Route path="/*" element={<LoginPage loginSuccess={this.onLoginSuccess}/>} />
+                                <Route path="/*" element={<LoginPage loginSuccess={onLoginSuccess}/>} />
                                 <Route path="/register" element={<RegisterPage />} />
                             </Routes>
                         </main>
                     </div>
-                </LocaleProvider>
+                    </LocaleProvider>
+                </ThemeProvider>
             )
         }
  
     return (
-        <LocaleProvider value={this.state.localeContext}>
-        <div className="app-container">
+        <ThemeProvider value={themeContext}>
+        <LocaleProvider value={localeContext}>
+        <div className="app-container" data-theme={theme}>
             <header>
-                <Navigation />
+                <Navigation logout={onLogout} name={authedUser.name} />
             </header>
                 <main>
                     <Routes>
@@ -106,8 +116,8 @@ class NoteApp extends React.Component {
                 </main>
         </div>
         </LocaleProvider>
+        </ThemeProvider>
     )
-}
 }
 
 export default NoteApp;

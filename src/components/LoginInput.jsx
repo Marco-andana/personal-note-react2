@@ -1,56 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
+import useInput from "../utils/useInput";
 
-class LoginInput extends React.Component {
-    constructor(props) {
-        super(props);
+function LoginInput({ login }) {
+    const [email, onEmailChange] = useInput('');
+    const [password, onPasswordChange] = useInput('');
 
-        this.state = {
-            email: "",
-            password: "",
-        }
-
-    this.onEmailChangeHandler = this.onEmailChangeHandler.bind(this);
-    this.onPasswordChangeHandler = this.onPasswordChangeHandler.bind(this);
-    this.onSubmitHandler = this.onSubmitHandler.bind(this);
-    }
-
-    onEmailChangeHandler(event) {
-        this.setState(() => {
-            return {
-                email: event.target.value
-            }
-        })
-    }
-
-    onPasswordChangeHandler(event) {
-        this.setState(() => {
-            return {
-                password: event.target.value
-            }
-        })
-    }
-
-    onSubmitHandler(event) {
+    function onSubmitHandler(event) {
         event.preventDefault();
 
-        this.props.login({
-            email: this.state.email,
-            password: this.state.password,
+        login({
+            email,
+            password,
         })
     }
 
-    render() {
         return (
-            <form onSubmit={this.onSubmitHandler} className="input-login">
+            <form onSubmit={onSubmitHandler} className="input-login">
                 <label>Email</label>
-                <input type="email" value={this.state.email} onChange={this.onEmailChangeHandler} />
+                <input type="email" value={email} onChange={onEmailChange} />
                 <label>Password</label>
-                <input type="password" value={this.state.password} onChange={this.onPasswordChangeHandler} />
+                <input type="password" value={password} onChange={onPasswordChange} />
                 <button>Login</button>
             </form>
         )
-    }
 }
     LoginInput.propTypes = {
         login: PropTypes.func.isRequired,

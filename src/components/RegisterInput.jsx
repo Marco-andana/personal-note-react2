@@ -1,71 +1,35 @@
 import React from "react";
 import PropTypes from "prop-types";
+import useInput from "../utils/useInput";
 
-class RegisterInput extends React.Component {
-    constructor(props) {
-        super(props);
+function RegisterInput({ register }) {
+    const [name, onNameChange] = useInput('');
+    const [email, onEmailChange] = useInput('');
+    const [password, onPasswordChange] = useInput('');
 
-        this.state = {
-            name: '',
-            email: '',
-            password: '',
-        }
-
-    this.onNameChange = this.onNameChange.bind(this);
-    this.onEmailChange = this.onEmailChange.bind(this);
-    this.onPasswordChange = this.onPasswordChange.bind(this);
-    this.onSubmitHandler = this.onSubmitHandler.bind(this);
-    }
-
-    onNameChange(event) {
-        this.setState(() => {
-            return {
-                name: event.target.value
-            }
-        })
-    }
-
-    onEmailChange(event) {
-        this.setState(() => {
-            return {
-                email: event.target.value
-            }
-        })
-    }
-
-    onPasswordChange(event) {
-        this.setState(() => {
-            return {
-                password: event.target.value
-            }
-        })
-    }
-
-    onSubmitHandler(event) {
+    function onSubmitHandler(event) {
         event.preventDefault();
 
-        this.props.register({
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password,
+        register({
+            name: name,
+            email: email,
+            password: password,
         })
     }
 
-    render() {
         return (
-            <form className="input-register" onSubmit={this.onSubmitHandler}>
+            <form className="input-register" onSubmit={onSubmitHandler}>
             <label>Name</label>
-            <input type="text" value={this.state.name} onChange={this.onNameChange} />
+            <input type="text" value={name} onChange={onNameChange} />
             <label>Email</label>
-            <input type="email" value={this.state.email} onChange={this.onEmailChange} />
+            <input type="email" value={email} onChange={onEmailChange} />
             <label>Password</label>
-            <input type="password" value={this.state.password} autoComplete='current-password' onChange={this.onPasswordChange} />
+            <input type="password" value={password} autoComplete='current-password' onChange={onPasswordChange} />
             <label>Confirm Password</label>
-            <input type="password" value={this.state.password} onChange={this.onPasswordChange} />
+            <input type="password" value={password} onChange={onPasswordChange} />
             <button>Register</button>
             </form>
         )
-    }
 }
 
 RegisterInput.propTypes = {

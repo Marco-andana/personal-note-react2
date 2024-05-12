@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import LoginInput from "../components/LoginInput";
 import { login } from "../utils/network-data"
+import LocaleContext from "../contexts/LocaleContext";
 
 function LoginPage({ loginSuccess }) {
     async function onLogin({ email, password }) {
@@ -13,11 +14,13 @@ function LoginPage({ loginSuccess }) {
         }
     }
 
+    const { locale } = React.useContext(LocaleContext);
+
     return (
         <section className="login-page">
-            <h2>Yuk, login untuk menggunakan aplikasi.</h2>
+            <h2>{locale === 'id' ? 'Silahkan login untuk menggunakan aplikasi.' : 'Login to use application'}</h2>
             <LoginInput login={onLogin} />
-            <p>Belum punya akun? <Link to="/register">Daftar di sini</Link></p>
+            <p>{locale === 'id' ? 'Belum punya akun? ' : 'Dont have account? '} <Link to="/register">{locale === 'id' ? 'Daftar di sini' : 'Register here'}</Link></p>
         </section>
     )
 }
