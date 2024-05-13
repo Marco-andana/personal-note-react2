@@ -35,7 +35,7 @@ function Navigation({logout, name, authedUser}) {
     return (
         <LocaleConsumer>
         {
-            ({ locale, toggleLocale}) => {
+            ({ locale, toggleLocale, theme, toggleTheme}) => {
         return (
             <>
         <h1>
@@ -45,7 +45,7 @@ function Navigation({logout, name, authedUser}) {
             <ul>   
                 <li><Link to={'/arsip'}>Arsip</Link></li>
                 <li><button className="toggle-locale" onClick={toggleLocale}><SiGoogletranslate {...locale === 'id' ? 'en' : 'id'}/></button></li>
-                <li><button className="toggle-theme" onClick={toggleLocale}>{locale === 'light' ? <FiMoon /> : <FiSun />}</button></li>
+                <li><button className="toggle-theme" onClick={toggleTheme}>{theme === 'light' ? <FiMoon /> : <FiSun />}</button></li>
                 <li><button className="button-logout" onClick={logout}><FiLogOut />{name}</button></li> 
             </ul>
         </nav>

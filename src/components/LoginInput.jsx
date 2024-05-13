@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import useInput from "../utils/useInput";
+import useInput from "../hooks/useInput";
 
 function LoginInput({ login }) {
     const [email, onEmailChange] = useInput('');
