@@ -18,10 +18,10 @@ function NoteDetailAction({ id }) {
     async function onDeleteHandler(id) {
         if(notes.archived) {
             await deleteNote(id);
-            navigate('/');
+            navigate('/arsip');
         } else {
             await deleteNote(id);
-            navigate('/arsip');
+            navigate('/');
         }
     }
 
