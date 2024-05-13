@@ -50,11 +50,7 @@ function NoteDetailAction({ id }) {
 }
 
 NoteDetailAction.propTypes = {
-    id: PropTypes.string.isRequired,
-    onDelete: PropTypes.func.isRequired,
-    onArchive: PropTypes.func.isRequired,
-    onUnArchive: PropTypes.func.isRequired,
-    archived: PropTypes.bool.isRequired,
+    id: PropTypes.string.isRequired
 }
 
 export default NoteDetailAction;

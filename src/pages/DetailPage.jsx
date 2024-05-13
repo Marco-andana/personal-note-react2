@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 
 function DetailPage() {
     const { id } = useParams();
-    const [notes, setNotes] = React.useState({});
+    const [notes, setNotes] = React.useState();
 
     React.useEffect(() => {
         getNote(id).then(({ data }) => {
